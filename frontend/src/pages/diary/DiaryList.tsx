@@ -6,8 +6,10 @@ import { moodEmoji } from '@/utils/mood'
 import { useTheme } from '@/utils/theme'
 import { Plus, Calendar, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/utils/cn'
+import { demoDiaries } from '@/data/demo'
 
 const PAGE_SIZE = 20
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function DiaryList() {
   const { pick } = useTheme()
@@ -18,6 +20,13 @@ export function DiaryList() {
   const today = new Date().toISOString().slice(0, 10)
 
   const loadDiaries = useCallback((p: number) => {
+    if (IS_DEMO) {
+      setDiaries(demoDiaries as Diary[])
+      setHasMore(false)
+      setPage(1)
+      setLoading(false)
+      return
+    }
     setLoading(true)
     diaryApi.list({ page: p, page_size: PAGE_SIZE }).then((res) => {
       setDiaries(res.data)

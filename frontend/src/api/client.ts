@@ -22,10 +22,12 @@ export const setNavigate = (navigate: (path: string) => void) => {
   navigateFn = navigate
 }
 
+const IS_DEMO = window.location.hostname.includes('github.io')
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !IS_DEMO) {
       useAuthStore.getState().logout()
       // Use React Router navigate if available, fallback to window.location
       if (navigateFn) {
@@ -35,14 +37,16 @@ apiClient.interceptors.response.use(
       }
       return Promise.reject(error)
     }
-    // Show user-friendly error message
-    const detail = error.response?.data?.detail
-    if (Array.isArray(detail)) {
-      detail.forEach((d: { msg: string }) => toast.error(d.msg))
-    } else if (typeof detail === 'string') {
-      toast.error(detail)
-    } else if (!error.response) {
-      toast.error('网络连接失败，请检查服务是否运行')
+    // Show user-friendly error message (skip in demo mode since there's no backend)
+    if (!IS_DEMO) {
+      const detail = error.response?.data?.detail
+      if (Array.isArray(detail)) {
+        detail.forEach((d: { msg: string }) => toast.error(d.msg))
+      } else if (typeof detail === 'string') {
+        toast.error(detail)
+      } else if (!error.response) {
+        toast.error('网络连接失败，请检查服务是否运行')
+      }
     }
     return Promise.reject(error)
   },

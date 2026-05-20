@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { financeApi, type FinanceAccount, type FinanceTransaction } from '@/api/finance'
 import { Plus, TrendingUp, TrendingDown, Wallet, CreditCard, ArrowUpRight } from 'lucide-react'
 import { useTheme } from '@/utils/theme'
+import { demoAccounts, demoTransactions, demoSummary } from '@/data/demo'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function FinanceHome() {
   const { pick } = useTheme()
@@ -12,6 +15,13 @@ export function FinanceHome() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (IS_DEMO) {
+      setAccounts(demoAccounts as unknown as FinanceAccount[])
+      setRecentTx(demoTransactions as unknown as FinanceTransaction[])
+      setSummary(demoSummary)
+      setLoading(false)
+      return
+    }
     Promise.all([
       financeApi.getAccounts(),
       financeApi.getTransactions({ page_size: 5 }),

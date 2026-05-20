@@ -5,6 +5,9 @@ import { ArrowLeft, Save } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getTodayStr } from '@/utils/date'
 import { useTheme } from '@/utils/theme'
+import { demoAccounts, demoCategories } from '@/data/demo'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function TransactionEditor() {
   const { pick } = useTheme()
@@ -20,6 +23,11 @@ export function TransactionEditor() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
+    if (IS_DEMO) {
+      setAccounts(demoAccounts as unknown as FinanceAccount[])
+      setCategories(demoCategories as unknown as FinanceCategory[])
+      return
+    }
     financeApi.getAccounts().then((res) => setAccounts(res.data))
     financeApi.getCategories().then((res) => setCategories(res.data))
   }, [])
@@ -29,6 +37,11 @@ export function TransactionEditor() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!amount || !accountId) return
+    if (IS_DEMO) {
+      toast.success('演示模式：交易已记录（仅预览）')
+      navigate('/finance')
+      return
+    }
     setSaving(true)
     try {
       await financeApi.createTransaction({

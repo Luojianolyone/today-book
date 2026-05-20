@@ -10,6 +10,9 @@ import { moodEmoji } from '@/utils/mood'
 import { cn } from '@/utils/cn'
 import { useTheme } from '@/utils/theme'
 import toast from 'react-hot-toast'
+import { demoDashboard } from '@/data/demo'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 interface DashboardData {
   today: string
@@ -26,6 +29,11 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (IS_DEMO) {
+      setData(demoDashboard as DashboardData)
+      setLoading(false)
+      return
+    }
     statsApi.getDashboard().then((res) => {
       setData(res.data)
       setLoading(false)

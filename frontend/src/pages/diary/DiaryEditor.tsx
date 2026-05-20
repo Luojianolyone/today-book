@@ -7,6 +7,9 @@ import { ArrowLeft, Save, Trash2, Eye, Edit3 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import toast from 'react-hot-toast'
 import { cn } from '@/utils/cn'
+import { demoDiaries } from '@/data/demo'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 const MOODS = [
   { value: 'happy', label: '😊 开心' },
@@ -38,6 +41,17 @@ export function DiaryEditor() {
   const [isPreview, setIsPreview] = useState(false)
 
   useEffect(() => {
+    if (IS_DEMO) {
+      const found = demoDiaries.find((d) => d.date === date)
+      if (found) {
+        setTitle(found.title || '')
+        setContent(found.content || '')
+        setMood(found.mood || '')
+        setWeather(found.weather || '')
+      }
+      setLoading(false)
+      return
+    }
     diaryApi.getByDate(date).then((res) => {
       setTitle(res.data.title || '')
       setContent(res.data.content || '')
@@ -49,6 +63,11 @@ export function DiaryEditor() {
   }, [date])
 
   const handleSave = useCallback(async () => {
+    if (IS_DEMO) {
+      toast.success('演示模式：日记已保存（仅预览）')
+      navigate('/diary')
+      return
+    }
     setSaving(true)
     try {
       await diaryApi.upsert({ date, title: title || null, content: content || null, mood: mood || null, weather: weather || null })
@@ -62,6 +81,11 @@ export function DiaryEditor() {
   }, [date, title, content, mood, weather, navigate])
 
   const handleDelete = useCallback(async () => {
+    if (IS_DEMO) {
+      toast.success('演示模式：日记已删除（仅预览）')
+      navigate('/diary')
+      return
+    }
     if (!confirm('确定要删除这篇日记吗？')) return
     try {
       await diaryApi.delete(date)

@@ -4,7 +4,10 @@ import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { SearchModal } from '@/components/SearchModal'
 import { NotificationPanel } from '@/components/NotificationPanel'
+import { DemoBanner } from '@/components/DemoBanner'
 import { useThemeStore } from '@/stores/themeStore'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function AppShell() {
   const theme = useThemeStore((s) => s.theme)
@@ -21,6 +24,7 @@ export function AppShell() {
     <div className={`flex h-screen overflow-hidden ${theme}`}>
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
+        {IS_DEMO && <DemoBanner />}
         <Header
           onOpenSearch={() => setSearchOpen(true)}
           onOpenNotifications={() => setNotifOpen(true)}

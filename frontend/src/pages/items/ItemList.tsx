@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import { itemApi, type Item } from '@/api/item'
 import { Plus, Package, Search, Tag, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTheme } from '@/utils/theme'
+import { demoItems } from '@/data/demo'
 
 const PAGE_SIZE = 30
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function ItemList() {
   const { pick } = useTheme()
@@ -16,6 +18,14 @@ export function ItemList() {
   const [hasMore, setHasMore] = useState(false)
 
   const loadItems = useCallback((p: number) => {
+    if (IS_DEMO) {
+      setItems(demoItems as Item[])
+      setStats({ total_items: demoItems.length, total_value: demoItems.reduce((s, i) => s + (i.current_value || 0), 0) })
+      setHasMore(false)
+      setPage(1)
+      setLoading(false)
+      return
+    }
     setLoading(true)
     Promise.all([
       itemApi.list({ page: p, page_size: PAGE_SIZE }),

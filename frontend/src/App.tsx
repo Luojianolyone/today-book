@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
 import { setNavigate } from '@/api/client'
+import { useAuthStore } from '@/stores/authStore'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { AppShell } from '@/components/layout/AppShell'
 import { RequireAuth } from '@/components/RequireAuth'
@@ -17,11 +18,23 @@ import { ItemList } from '@/pages/items/ItemList'
 import { ReviewList } from '@/pages/review/ReviewList'
 import { ReviewEditor } from '@/pages/review/ReviewEditor'
 
+// Detect if running on GitHub Pages (no backend available)
+const IS_GITHUB_PAGES = window.location.hostname.includes('github.io')
+
 function AppContent() {
   const navigate = useNavigate()
+  const login = useAuthStore((s) => s.login)
+
   useEffect(() => {
     setNavigate(navigate)
   }, [navigate])
+
+  // Auto-login on GitHub Pages for demo
+  useEffect(() => {
+    if (IS_GITHUB_PAGES && !useAuthStore.getState().isLoggedIn) {
+      login('demo-token', 1, 'Demo User')
+    }
+  }, [login])
 
   return (
     <>
@@ -33,7 +46,9 @@ function AppContent() {
         }}
       />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {!IS_GITHUB_PAGES && (
+          <Route path="/login" element={<Login />} />
+        )}
         <Route
           path="/"
           element={
@@ -66,7 +81,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={IS_GITHUB_PAGES ? '/today-book' : '/'}>
       <AppContent />
     </BrowserRouter>
   )

@@ -4,6 +4,9 @@ import { reviewApi, type Review } from '@/api/review'
 import { Plus, CheckCircle, Star, ClipboardList } from 'lucide-react'
 import { formatDate } from '@/utils/date'
 import { useTheme } from '@/utils/theme'
+import { demoReviews } from '@/data/demo'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function ReviewList() {
   const { pick } = useTheme()
@@ -12,6 +15,12 @@ export function ReviewList() {
   const [filter, setFilter] = useState<string | null>(null)
 
   useEffect(() => {
+    if (IS_DEMO) {
+      const filtered = filter ? demoReviews.filter((r) => r.type === filter) : demoReviews
+      setReviews(filtered as Review[])
+      setLoading(false)
+      return
+    }
     reviewApi.list(filter || undefined).then((res) => {
       setReviews(res.data)
     }).finally(() => setLoading(false))

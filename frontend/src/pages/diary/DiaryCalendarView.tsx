@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { diaryApi, type CalendarDay } from '@/api/diary'
 import { useTheme } from '@/utils/theme'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { demoCalendar } from '@/data/demo'
+
+const IS_DEMO = window.location.hostname.includes('github.io')
 
 export function DiaryCalendar() {
   const { pick } = useTheme()
@@ -13,6 +16,10 @@ export function DiaryCalendar() {
   const [days, setDays] = useState<CalendarDay[]>([])
 
   useEffect(() => {
+    if (IS_DEMO) {
+      setDays(demoCalendar(year, month) as CalendarDay[])
+      return
+    }
     diaryApi.getCalendar(year, month).then((res) => {
       setDays(res.data)
     }).catch(() => {})

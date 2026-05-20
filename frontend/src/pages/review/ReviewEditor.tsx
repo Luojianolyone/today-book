@@ -6,6 +6,8 @@ import { ArrowLeft, Save, Star, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getWeekRange, getMonthRange, getYearRange } from '@/utils/date'
 
+const IS_DEMO = window.location.hostname.includes('github.io')
+
 export function ReviewEditor() {
   const { id } = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
@@ -74,6 +76,11 @@ export function ReviewEditor() {
 
   const handleSave = useCallback(async () => {
     if (!periodStart || !periodEnd) return
+    if (IS_DEMO) {
+      toast.success('演示模式：复盘已保存（仅预览）')
+      navigate('/review')
+      return
+    }
     setSaving(true)
     try {
       const data: Record<string, unknown> = {
