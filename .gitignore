@@ -38,4 +38,3 @@ Thumbs.db
 
 # ----- Docker -----
 *.log
-.github/workflows/deploy.yml
