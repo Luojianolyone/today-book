@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     APP_NAME: str = "Today Book"
     APP_VERSION: str = "0.1.0"
     DATABASE_URL: str = "sqlite:///./data/app.db"
-    SECRET_KEY: str = "NAxNfYLbaPb5WW4Jp9mum7yWkk0myRznDbWtDsJqF1YEw1wjWUaU-c0CGB_FdWsP"
+    SECRET_KEY: str = "change-me-in-production-set-via-env-variable"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_DAYS: int = 30
     UPLOAD_DIR: str = "./uploads"
