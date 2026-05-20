@@ -1,0 +1,40 @@
+# ============================================
+# Today Book — .gitignore
+# ============================================
+
+# ----- 环境变量（含敏感信息） -----
+.env
+.env.local
+.env.production
+
+# ----- Python -----
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.py[cod]
+*$py.class
+backend/data/
+backend/uploads/
+
+# ----- Node -----
+frontend/node_modules/
+frontend/dist/
+
+# ----- 编译产物 -----
+frontend/tailwind.css
+frontend/tsconfig.tsbuildinfo
+frontend/tsconfig.node.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# ----- IDE -----
+.vscode/
+.idea/
+
+# ----- OS -----
+.DS_Store
+Thumbs.db
+
+# ----- Docker -----
+*.log

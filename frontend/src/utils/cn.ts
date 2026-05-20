@@ -1,0 +1,7 @@
+/* today_book/frontend/src/utils/cn.ts */
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}

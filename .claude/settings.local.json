@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"C:/Users/luosir/AppData/Local/Temp/moaitime/apps/api/\" 2>&1)",
+      "Read(//c/Users/luosir/AppData/Local/Temp/moaitime/apps/api/**)"
+    ]
+  }
+}

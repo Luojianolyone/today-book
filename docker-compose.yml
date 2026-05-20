@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: todaybook-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/uploads:/app/uploads
+    environment:
+      - DATABASE_URL=sqlite:///./data/app.db
+      - SECRET_KEY=NAxNfYLbaPb5WW4Jp9mum7yWkk0myRznDbWtDsJqF1YEw1wjWUaU-c0CGB_FdWsP
+      - CORS_ORIGINS=http://localhost:3003,http://localhost:80
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - todaybook-network
+
+  frontend:
+    build: ./frontend
+    container_name: todaybook-frontend
+    ports:
+      - "3003:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - todaybook-network
+
+networks:
+  todaybook-network:
+    driver: bridge

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sL \"https://raw.githubusercontent.com/songtianlun/diarum/main/internal/api/export_import.go\")",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/PhiTux/DailyTxT/main/frontend/svelte.config.js\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/TriliumNext/Notes/main/README.md)"
+    ]
+  }
+}

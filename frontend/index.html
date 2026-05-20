@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Today Book — 个人综合管理系统</title>
+    <style>
+      /* Block rendering until theme is applied to prevent any flash */
+      html { opacity: 0; transition: opacity 0.15s ease-out; }
+      html.theme-ready { opacity: 1; }
+    </style>
+    <script>
+      // Apply theme class before first paint to prevent color flash
+      (function() {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light') {
+            document.documentElement.classList.replace('dark', 'light');
+          }
+        } catch (e) {}
+        // Reveal the page after theme class is set
+        document.documentElement.classList.add('theme-ready');
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
